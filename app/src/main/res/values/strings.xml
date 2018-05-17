@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">WRhymer</string>
+    <string name="title_home">Songs</string>
+    <string name="title_dashboard">Rhyme Generator</string>
+    <string name="title_notifications">Word Generator</string>
+
+    <string name="song_name">Name</string>
+    <string name="song_type">Type here…</string>
+    <string name="song_note">New Song</string>
+    <string name="song_save">Save</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_dank_fragment">Hello dank fragment</string>
+    <string name="hello_rhyme_fragment">Hello rhyme fragment</string>
+    <string name="hello_list_fragment">Hello list fragment</string>
+    <string name="hello_word_fragment">Hello word fragment</string>
+</resources>
