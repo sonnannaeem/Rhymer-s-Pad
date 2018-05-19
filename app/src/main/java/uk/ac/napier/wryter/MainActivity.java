@@ -5,15 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,8 +50,6 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //mListViewSongs = (ListView) findViewById(R.id.fragment_song_list);
-
         //Making sure that if no fragment has been added, to add the song list fragment first
         if (getSupportFragmentManager().findFragmentById(R.id.main_frameLayout) == null){
             getSupportFragmentManager().beginTransaction().add(R.id.main_frameLayout, mSongList).commit();
@@ -70,11 +62,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options, menu);
+        inflater.inflate(R.menu.menu_song_new, menu);
         return true;
     }
 
-    //Create a new song through the options button
+    //Create a new song through the add button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent writingActivity = new Intent(this, WritingActivity.class);

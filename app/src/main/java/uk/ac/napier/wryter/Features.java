@@ -50,6 +50,20 @@ public class Features {
     }
 
     /**
+     * Deletes specific song by using its file name
+     * @param c The application's current context
+     * @param songName The file name of the song
+     */
+    public static void deleteSong(Context c, String songName){
+        File songDirectory = c.getFilesDir(); //Gets the file directory of the app
+        File songFile = new File(songDirectory, songName);
+
+        if (songFile.exists()){
+            songFile.delete();
+        }
+    }
+
+    /**
      * Retrieves any saved songs and de-serializes them into a list
      * @param c The application's current c
      * @return A list of all the saved songs that are de-serialized

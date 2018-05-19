@@ -13,4 +13,14 @@
 
     </item>
 
+    <item
+        android:id="@+id/menu_song_delete"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:orderInCategory="1"
+        android:title="@string/song_note"
+        app:showAsAction="always" >
+
+    </item>
+
 </menu>

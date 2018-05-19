@@ -44,9 +44,9 @@ public class SongList extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Toast shortToast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
         //Making toasts display a little above the bottom navigation bar
-        shortToast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
 
         mListViewSongs.setAdapter(null);
 
@@ -54,8 +54,8 @@ public class SongList extends Fragment {
 
         //Checking if there are any saved songs
         if (songs == null || songs.size() == 0) {
-            shortToast.setText("No lyrics saved");
-            shortToast.show();
+            toast.setText("No lyrics saved");
+            toast.show();
             return;
         } else {
             //Set the song list to the adapter in order to display the saved songs
