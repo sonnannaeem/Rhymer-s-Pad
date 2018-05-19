@@ -52,9 +52,6 @@ public class WritingActivity extends AppCompatActivity {
      * @return Whether it saved or not
      */
     private boolean save(){
-        //Toast toast= Toast.makeText(getApplicationContext(),"Lyrics saved!", Toast.LENGTH_SHORT);
-        //toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800); //Making the toast display a little above the bottom menu_navigation bar
-
         String name = this.mName.getText().toString(); //The mName of the song as a String
         String lyrics = this.mLyrics.getText().toString(); //The mLyrics of the song as a String
         long time = System.currentTimeMillis(); //The current time of the system
@@ -62,6 +59,13 @@ public class WritingActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
 
         Song song;
+
+        //Checking to see if there is a title or body
+        if (name.trim().isEmpty() || lyrics.trim().isEmpty()){
+            toast.setText("Please enter lyrics and a name");
+            toast.show();
+            return false; //Not saved
+        }
 
         //Checking whether to save as a new song or to update an existing one
         if (mExistingSong == null) {
@@ -77,7 +81,7 @@ public class WritingActivity extends AppCompatActivity {
             toast.setText("Lyrics saved!");
             toast.show();
 
-            startActivity(intent); //Return specifically to the song list after saved
+            startActivity(intent); //Return specifically to the song list after saving
             return true; //Saved
         }
         else{
