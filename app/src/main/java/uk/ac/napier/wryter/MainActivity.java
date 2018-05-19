@@ -17,8 +17,6 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
-    //private ListView mListViewSongs;
 
     private SongList mSongList = new SongList();
     private RhymeGenerator mRhymeGenerator = new RhymeGenerator();
