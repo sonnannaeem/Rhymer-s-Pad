@@ -15,6 +15,9 @@ public class WritingActivity extends AppCompatActivity {
     private EditText mName; //Name of the song
     private EditText mLyrics; //Lyrics of the song
 
+    private String mSongFileName; //Name of the song's file
+    private Song mExistingSong; //A song that is already made
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +25,17 @@ public class WritingActivity extends AppCompatActivity {
 
         mName = (EditText) findViewById(R.id.writing_song_name);
         mLyrics = (EditText) findViewById(R.id.writing_song_lyrics);
+
+        mSongFileName = getIntent().getStringExtra("SONG_FILE");
+        if (mSongFileName != null && !mSongFileName.isEmpty()){ //Checking if the file name exists
+            mExistingSong = Features.getSong(this, mSongFileName);
+
+            if (mExistingSong != null){ //Checking if the song exists
+                //Setting the content of the view to the already existing song
+                mName.setText(mExistingSong.getName());
+                mLyrics.setText(mExistingSong.getLyrics());
+            }
+        }
     }
 
     /**
@@ -29,21 +43,28 @@ public class WritingActivity extends AppCompatActivity {
      * @return Whether it saved or not
      */
     private boolean save(){
+        Toast toast= Toast.makeText(getApplicationContext(),"Lyrics saved!", Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800); //Making the toast display a little above the bottom navigation bar
+
         String name = this.mName.getText().toString(); //The mName of the song as a String
         String lyrics = this.mLyrics.getText().toString(); //The mLyrics of the song as a String
         long time = System.currentTimeMillis(); //The current time of the system
 
         Intent intent = new Intent(this, MainActivity.class);
 
-        Song song = new Song(name, lyrics, time); //The current song that is made
+        Song song;
 
-        Toast toast= Toast.makeText(getApplicationContext(),"Lyrics saved!", Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800); //Making the toast display a little above the bottom navigation bar
+        //Checking whether to save as a new song or to update an existing one
+        if (mExistingSong == null) {
+            song = new Song(name, lyrics, time); //The current song that is made
+        }
+        else{
+            song = new Song(name, lyrics, mExistingSong.getTime()); //The current song that is updated
+        }
 
         if(Features.saveSong(this, song)){
 
             //Giving user confirmation on their save
-            //Toast.makeText(this, "Lyrics saved!", Toast.LENGTH_SHORT).show();
             toast.show();
 
             startActivity(intent); //Return specifically to the song list after saved

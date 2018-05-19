@@ -29,17 +29,18 @@ public class SongAdapter extends ArrayAdapter<Song> {
 
         Song song = getItem(position);
 
+        //Setting the song's appropriate texts to their respective views
         if (song != null){
             TextView name = (TextView) convertView.findViewById(R.id.list_song_name);
             TextView time = (TextView) convertView.findViewById(R.id.list_song_time);
             TextView lyrics = (TextView) convertView.findViewById(R.id.list_song_lyrics);
 
             name.setText(song.getName());
-            time.setText(song.dayAsString());
+            time.setText(song.dateAsString());
 
             //If the lyrics are too large to preview
             if (song.getLyrics().length() > 50){
-                lyrics.setText(song.getLyrics().substring(0, 50));
+                lyrics.setText(song.getLyrics().substring(0, 50) + "…");
             }
             else {
                 lyrics.setText(song.getLyrics());

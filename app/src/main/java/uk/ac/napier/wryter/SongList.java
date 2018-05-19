@@ -1,6 +1,7 @@
 package uk.ac.napier.wryter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -56,8 +58,22 @@ public class SongList extends Fragment {
             shortToast.show();
             return;
         } else {
+            //Set the song list to the adapter in order to display the saved songs
             SongAdapter sa = new SongAdapter(getContext(), R.layout.item_song, songs);
             mListViewSongs.setAdapter(sa);
         }
+
+        //An event handler for when the user clicks on one of the songs in the list
+        mListViewSongs.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String songName = ((Song) mListViewSongs.getItemAtPosition(position)).getTime() + Features.FILE_EXTENSION;
+
+                //Launches the writing activity once the song in the list is clicked on
+                Intent intent = new Intent (getContext(), WritingActivity.class);
+                intent.putExtra("SONG_FILE", songName); //Inputs the data of the song file into the new activity
+                startActivity(intent);
+            }
+        });
     }
 }

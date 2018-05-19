@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:ems="10"
             android:gravity="top"
-            android:inputType="textPersonName"
+            android:inputType="textMultiLine"
             android:hint="@string/song_type" />
     </LinearLayout>
 

@@ -87,7 +87,7 @@ public class Song implements Serializable {
      *
      * @return The date as a string
      */
-    public String dayAsString() {
+    public String dateAsString() {
         String sDate = DateFormat.getDateInstance().format(new Date());
         return sDate;
     }
