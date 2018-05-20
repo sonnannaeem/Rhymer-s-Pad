@@ -15,4 +15,5 @@
     <string name="hello_rhyme_fragment">Hello rhyme fragment</string>
     <string name="hello_list_fragment">Hello list fragment</string>
     <string name="hello_word_fragment">Hello word fragment</string>
+    <string name="test">test</string>
 </resources>

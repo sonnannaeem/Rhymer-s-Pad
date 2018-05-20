@@ -1,6 +1,7 @@
 package uk.ac.napier.wryter;
 
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -24,8 +27,8 @@ import java.net.URL;
  */
 public class RhymeGenerator extends Fragment {
 
-    TextView mTextView;
-    Button mButton;
+    private TextView mTextView;
+    private Button mButton;
 
     public RhymeGenerator() {
         // Required empty public constructor
@@ -49,8 +52,8 @@ public class RhymeGenerator extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v == mButton){
-                    new APITask().execute("crazy");
+                if (v == mButton) {
+                    new APITask().execute("forgetful");
                 }
             }
         });
@@ -58,16 +61,20 @@ public class RhymeGenerator extends Fragment {
 
     class APITask extends AsyncTask<String, Void, String> {
 
+        private ProgressDialog loading = new ProgressDialog(getContext());
+
         @Override
         protected void onPreExecute() {
-
-            //Loading
+            //Loading gif
+            loading.setMessage("Loading");
+            loading.show();
         }
 
         @Override
         protected String doInBackground(String... strings) {
             String s1 = strings[0];
 
+            //Grabs the text from the API site
             try {
                 URL url = new URL("https://api.datamuse.com/words?rel_rhy=" + s1);
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -91,6 +98,12 @@ public class RhymeGenerator extends Fragment {
 
         @Override
         protected void onPostExecute(String s) {
+            //Stop loading gif
+            if (loading.isShowing()){
+                loading.dismiss();
+            }
+
+            mButton.setVisibility(View.GONE);
             mTextView.setText(s);
         }
     }
