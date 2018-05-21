@@ -57,15 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-    /* Options Menu */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_song_new, menu);
-        return true;
-    }
-
     //Create a new song through the add button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

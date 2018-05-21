@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,6 +30,8 @@ public class SongList extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_song_list, container, false);
 
@@ -38,6 +42,12 @@ public class SongList extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mListViewSongs = (ListView) getView().findViewById(R.id.fragment_song_list);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_song_new, menu);
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     @Override
@@ -70,7 +80,7 @@ public class SongList extends Fragment {
                 String songName = ((Song) mListViewSongs.getItemAtPosition(position)).getTime() + Features.FILE_EXTENSION;
 
                 //Launches the writing activity once the song in the list is clicked on
-                Intent intent = new Intent (getContext(), WritingActivity.class);
+                Intent intent = new Intent(getContext(), WritingActivity.class);
                 intent.putExtra("SONG_FILE", songName); //Inputs the data of the song file into the new activity
                 startActivity(intent);
             }

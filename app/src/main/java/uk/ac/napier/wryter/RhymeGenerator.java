@@ -13,11 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -32,7 +30,7 @@ import java.util.ArrayList;
 public class RhymeGenerator extends Fragment {
 
     private ListView mListView;
-    private TextView mTextView;
+    private EditText mEditText;
     private Button mButton;
 
     public RhymeGenerator() {
@@ -52,15 +50,16 @@ public class RhymeGenerator extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mListView = (ListView) getView().findViewById(R.id.fragment_rhyme_list);
-        mTextView = (TextView) getView().findViewById(R.id.rhyme_text);
-        mButton = (Button) getView().findViewById(R.id.rhyme_button);
+        mEditText = (EditText) getView().findViewById(R.id.fragment_rhyme_editText);
+        mButton = (Button) getView().findViewById(R.id.fragment_rhyme_button);
 
-        //Grab the info for the rhymes when the button is pressed
+        //Grab the rhymes of the text when the button is pressed
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String rhyme = mEditText.getText().toString();
                 if (v == mButton) {
-                    new APITask().execute("forgetful");
+                    new APITask().execute(rhyme);
                 }
             }
         });
@@ -113,11 +112,13 @@ public class RhymeGenerator extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             //Stop loading gif
-            if (loading.isShowing()){
+            if (loading.isShowing()) {
                 loading.dismiss();
             }
 
-            mButton.setVisibility(View.GONE); //Getting rid of the button when the list of rhymes appears
+            //Getting rid of the components when the list of rhymes appears
+            mEditText.setVisibility(View.GONE);
+            mButton.setVisibility(View.GONE);
 
             //Making toasts display a little above the bottom navigation bar
             Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
@@ -125,12 +126,11 @@ public class RhymeGenerator extends Fragment {
 
             //Listing the rhymes if there are any
             ArrayList<String> rhymes = Features.getRhymes(s);
-            if (rhymes == null || rhymes.size() == 0){
+            if (rhymes == null || rhymes.size() == 0) {
                 toast.setText("No rhymes found");
                 toast.show();
                 return;
-            }
-            else{
+            } else {
                 RhymeAdapter ra = new RhymeAdapter(getContext(), R.layout.item_rhyme, rhymes);
                 mListView.setAdapter(ra);
             }
