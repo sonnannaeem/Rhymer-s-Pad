@@ -147,7 +147,7 @@ public class Features {
     }
 
     /**
-     * Parses through the string data and sets each object as an individual element in a list
+     * A helper method that parses through the string data and sets each object in the string as an individual element in a list
      * @param rhymeData The string data
      * @return A list of all objects in the string data
      */
@@ -180,6 +180,34 @@ public class Features {
         }
 
         return objects;
+    }
+
+    /**
+     * Grabs rhymes from the string data
+     * @param data The text from the web API that needs to be parsed
+     * @return A list of rhymes if there are any
+     */
+    public static ArrayList<String> getRhymes(String data) {
+        ArrayList<String> rhymeData = parseData(data);
+        ArrayList<String> rhymes = new ArrayList<>();
+
+        if (rhymeData != null) {
+
+            try {
+
+                for (String element : rhymeData) {
+                    //Making each element a JSONObject in order to easily grab the word value and add it to the list
+                    JSONObject obj = new JSONObject(element);
+                    String rhyme = obj.getString("word");
+                    rhymes.add(rhyme);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return rhymes;
+        }
+        return null;
     }
 
 }

@@ -60,7 +60,7 @@ public class RhymeGenerator extends Fragment {
             @Override
             public void onClick(View v) {
                 if (v == mButton) {
-                    new APITask().execute("crazy");
+                    new APITask().execute("forgetful");
                 }
             }
         });
@@ -117,16 +117,14 @@ public class RhymeGenerator extends Fragment {
                 loading.dismiss();
             }
 
-            mButton.setVisibility(View.GONE);
-            //mTextView.setText(s);
+            mButton.setVisibility(View.GONE); //Getting rid of the button when the list of rhymes appears
 
-            //Listing the rhymes if there are any
-            Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
             //Making toasts display a little above the bottom navigation bar
+            Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
 
-            ArrayList<String> rhymes = Features.parseData(s);
-
+            //Listing the rhymes if there are any
+            ArrayList<String> rhymes = Features.getRhymes(s);
             if (rhymes == null || rhymes.size() == 0){
                 toast.setText("No rhymes found");
                 toast.show();

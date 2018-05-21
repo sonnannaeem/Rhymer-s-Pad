@@ -28,6 +28,7 @@ public class RhymeAdapter extends ArrayAdapter<String> {
 
         String rhyme = (String) getItem(position);
 
+        //Checks to see if there is a rhyme and then sets it to the appropriate item
         if (rhyme != null) {
             TextView rhymeName = (TextView) convertView.findViewById(R.id.list_rhyme_name);
 
