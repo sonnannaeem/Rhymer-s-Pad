@@ -1,13 +1,19 @@
 package uk.ac.napier.wryter;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -26,7 +32,7 @@ public class RhymeAdapter extends ArrayAdapter<String> {
                     .inflate(R.layout.item_rhyme, null);
         }
 
-        String rhyme = (String) getItem(position);
+        final String rhyme = (String) getItem(position);
 
         //Checks to see if there is a rhyme and then sets it to the appropriate item
         if (rhyme != null) {
@@ -34,6 +40,23 @@ public class RhymeAdapter extends ArrayAdapter<String> {
 
             rhymeName.setText(rhyme);
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                //Making toasts display a little above the bottom navigation bar
+                Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
+
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("simple text", rhyme);
+                clipboard.setPrimaryClip(clip);
+                toast.setText("Successfully copied to clipboard!");
+                toast.show();
+            }
+        });
 
         return convertView;
     }

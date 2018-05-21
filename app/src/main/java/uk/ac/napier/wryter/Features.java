@@ -16,6 +16,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class Features {
 
@@ -108,6 +111,13 @@ public class Features {
                 return null;
             }
         }
+
+        Collections.sort(songs, new Comparator<Song>() {
+            @Override
+            public int compare(Song o1, Song o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
 
         return songs;
     }
@@ -225,5 +235,4 @@ public class Features {
         }
         return null;
     }
-
 }

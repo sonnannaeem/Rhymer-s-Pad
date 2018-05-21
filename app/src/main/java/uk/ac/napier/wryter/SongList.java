@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,6 +49,20 @@ public class SongList extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_song_new, menu);
         super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent writingActivity = new Intent(getContext(), WritingActivity.class);
+        int itemId = item.getItemId();
+        int targetId = R.id.menu_song_new;
+
+        //If the menu button that's pressed is the new button, start the writing activity
+        if (itemId == targetId) {
+            startActivity(writingActivity);
+        }
+
+        return true;
     }
 
     @Override

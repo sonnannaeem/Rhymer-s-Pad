@@ -2,6 +2,10 @@ package uk.ac.napier.wryter;
 
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,8 +14,12 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -39,8 +47,9 @@ public class RhymeGenerator extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_rhyme_generator, container, false);
     }
@@ -66,12 +75,35 @@ public class RhymeGenerator extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        mListView.setAdapter(null);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_rhyme_options, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        int targetId = R.id.menu_rhyme_new;
+
+        Intent intent = new Intent(getContext(), MainActivity.class);
+        RhymeGenerator fragment = new RhymeGenerator();
+
+        //If the menu button that's pressed is the new button, start the writing activity
+        if (itemId == targetId) {
+            getFragmentManager().beginTransaction().replace(R.id.main_frameLayout, fragment).commit();
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * Class that handles web API tasks
+     */
     class APITask extends AsyncTask<String, Void, String> {
 
         private ProgressDialog loading = new ProgressDialog(getContext());
@@ -117,6 +149,7 @@ public class RhymeGenerator extends Fragment {
             }
 
             //Getting rid of the components when the list of rhymes appears
+            mEditText.setText("");
             mEditText.setVisibility(View.GONE);
             mButton.setVisibility(View.GONE);
 
@@ -125,6 +158,7 @@ public class RhymeGenerator extends Fragment {
             toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
 
             //Listing the rhymes if there are any
+            //mListView.setAdapter(null);
             ArrayList<String> rhymes = Features.getRhymes(s);
             if (rhymes == null || rhymes.size() == 0) {
                 toast.setText("No rhymes found");

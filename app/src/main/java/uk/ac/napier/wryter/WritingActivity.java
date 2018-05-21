@@ -86,7 +86,7 @@ public class WritingActivity extends AppCompatActivity {
         }
         else{
 
-            //Letting user know of error with their attempt to menu_song_options
+            //Letting user know of error with their attempt to save
             toast.setText("Error: Please make sure you have enough space");
             toast.show();
         }
@@ -132,11 +132,11 @@ public class WritingActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_song_options, menu);
+        inflater.inflate(R.menu.menu_writing_options, menu);
         return true;
     }
 
-    //Saving a new song with the menu_song_options button
+    //Saving a new song with the menu_writing_options button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent writingActivity = new Intent(this, WritingActivity.class);

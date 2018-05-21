@@ -20,4 +20,5 @@
     <string name="list_song_time">15/05/18</string>
     <string name="list_song_lyrics">THESE ARE THE LYRICS</string>
     <string name="list_rhyme_name">Rhyme</string>
+    <string name="RHYME">Rhyme</string>
 </resources>

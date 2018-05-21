@@ -12,9 +12,9 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity {
 
 
-    private SongList mSongList = new SongList();
-    private RhymeGenerator mRhymeGenerator = new RhymeGenerator();
-    private WordGenerator mWordGenerator = new WordGenerator();
+    private SongList mSongList;
+    private RhymeGenerator mRhymeGenerator;
+    private WordGenerator mWordGenerator;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -45,30 +45,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.main_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        mSongList = new SongList();
+        mRhymeGenerator = new RhymeGenerator();
+        mWordGenerator = new WordGenerator();
 
         //Making sure that if no fragment has been added, to add the song list fragment first
         if (getSupportFragmentManager().findFragmentById(R.id.main_frameLayout) == null){
             getSupportFragmentManager().beginTransaction().add(R.id.main_frameLayout, mSongList).commit();
         }
 
-    }
-
-    //Create a new song through the add button
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent writingActivity = new Intent(this, WritingActivity.class);
-        int itemId = item.getItemId();
-        int targetId = R.id.menu_song_new;
-
-        //If the menu button that's pressed is the new button, start the writing activity
-        if (itemId == targetId) {
-            startActivity(writingActivity);
-        }
-
-        return true;
     }
 }
