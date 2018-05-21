@@ -73,6 +73,7 @@ public class Features {
 
     /**
      * Retrieves any saved songs and de-serializes them into a list
+     *
      * @param c The application's current c
      * @return A list of all the saved songs that are de-serialized
      */
@@ -147,13 +148,15 @@ public class Features {
     }
 
     /**
-     * A helper method that parses through the string data and sets each object in the string as an individual element in a list
+     * A helper method that parses through the string data and sets each object in the string as an individual JSONObject in a list
+     *
      * @param rhymeData The string data
-     * @return A list of all objects in the string data
+     * @return A list of JSONObjects from the string data if there are any
      */
-    public static ArrayList<String> parseData(String rhymeData) {
-        ArrayList<String> objects = new ArrayList<>();
+    public static ArrayList<JSONObject> parseData(String rhymeData) {
+        ArrayList<JSONObject> objects = new ArrayList<>(); //List that holds all the rhyme data as separate JSONObjects
 
+        ArrayList<String> list = new ArrayList<>(); //List that holds all the rhyme data objects individually as strings
         int start = 1;
         for (int i = 0; i < rhymeData.length(); i++) {
 
@@ -162,48 +165,61 @@ public class Features {
 
                 if (test.equals("},{")) { //Checks to see if the index is at the splitting mark of the objects
                     String obj = rhymeData.substring(start, i + 1); //Grabs the individual object from the string
-                    objects.add(obj); //Adds the object to the list
+                    list.add(obj); //Adds the object to the list
                     start = i + 2; //Sets the starting point for the next object
                 }
 
 
-            }
-
-            else { //The case of the last object in the string
+            } else { //The case of the last object in the string
                 String test = rhymeData.substring(i, i + 1);
 
-                if (test.equals("]")){ //Checks to see if its at the end of both the string and the object
+                if (test.equals("]")) { //Checks to see if its at the end of both the string and the object
                     String obj = rhymeData.substring(start, i); //Grabs the last object in the string
-                    objects.add(obj); //Adds the objects to the list
+                    list.add(obj); //Adds the objects to the list
                 }
             }
         }
 
-        return objects;
+        //Makes each String element a JSONObject and adds them to the objects list
+        if (list != null || list.size() == 0) {
+            try {
+                for (String element : list) {
+                    JSONObject obj = new JSONObject(element);
+                    objects.add(obj);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("ERROR", "Something went wrong in making the string elements JSONObjects");
+            }
+            return objects;
+        }
+
+        return null;
     }
 
     /**
-     * Grabs rhymes from the string data
+     * Grabs rhymes from the string data and puts them in a list
+     *
      * @param data The text from the web API that needs to be parsed
      * @return A list of rhymes if there are any
      */
     public static ArrayList<String> getRhymes(String data) {
-        ArrayList<String> rhymeData = parseData(data);
+        ArrayList<JSONObject> parsedData = parseData(data);
         ArrayList<String> rhymes = new ArrayList<>();
 
-        if (rhymeData != null) {
+        if (parsedData != null || parsedData.size() == 0) {
 
             try {
 
-                for (String element : rhymeData) {
-                    //Making each element a JSONObject in order to easily grab the word value and add it to the list
-                    JSONObject obj = new JSONObject(element);
-                    String rhyme = obj.getString("word");
+                //Making each element a JSONObject in order to easily grab the word value and add it to the list
+                for (JSONObject element : parsedData) {
+                    String rhyme = element.getString("word");
                     rhymes.add(rhyme);
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
+                Log.e("ERROR", "Something went wrong in grabbing rhymes from the JSONObjects");
             }
             return rhymes;
         }
