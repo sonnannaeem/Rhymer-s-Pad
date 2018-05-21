@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,8 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  */
 public class RhymeGenerator extends Fragment {
+
+    private Toast toast;
 
     private ListView mListView;
     private EditText mEditText;
@@ -57,6 +60,10 @@ public class RhymeGenerator extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //Making toasts display a little above the bottom navigation bar
+        toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
 
         mListView = (ListView) getView().findViewById(R.id.fragment_rhyme_list);
         mEditText = (EditText) getView().findViewById(R.id.fragment_rhyme_editText);
@@ -136,7 +143,12 @@ public class RhymeGenerator extends Fragment {
                     urlConnection.disconnect();
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 Log.e("ERROR", e.getMessage(), e);
+
+                //Letting user know it could be an internet connection issue
+                toast.setText("Please make sure you have a working internet connection");
+                toast.show();
                 return null;
             }
         }
@@ -153,20 +165,25 @@ public class RhymeGenerator extends Fragment {
             mEditText.setVisibility(View.GONE);
             mButton.setVisibility(View.GONE);
 
-            //Making toasts display a little above the bottom navigation bar
-            Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
+            //Hide the keyboard after searched
+            View view = getActivity().getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
             //Listing the rhymes if there are any
-            //mListView.setAdapter(null);
-            ArrayList<String> rhymes = Features.getRhymes(s);
-            if (rhymes == null || rhymes.size() == 0) {
-                toast.setText("No rhymes found");
-                toast.show();
-                return;
-            } else {
-                RhymeAdapter ra = new RhymeAdapter(getContext(), R.layout.item_rhyme, rhymes);
-                mListView.setAdapter(ra);
+            if (s != null) { //Checking if
+                    ArrayList<String> rhymes = Features.getRhymes(s);
+
+                    if (rhymes == null || rhymes.size() == 0) { //Check to see if there were any rhymes at all
+                        toast.setText("No rhymes found");
+                        toast.show();
+                        return;
+                    } else {
+                        RhymeAdapter ra = new RhymeAdapter(getContext(), R.layout.item_rhyme, rhymes);
+                        mListView.setAdapter(ra);
+                    }
             }
         }
     }

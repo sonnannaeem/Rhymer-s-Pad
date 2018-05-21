@@ -166,44 +166,47 @@ public class Features {
     public static ArrayList<JSONObject> parseData(String rhymeData) {
         ArrayList<JSONObject> objects = new ArrayList<>(); //List that holds all the rhyme data as separate JSONObjects
 
-        ArrayList<String> list = new ArrayList<>(); //List that holds all the rhyme data objects individually as strings
-        int start = 1;
-        for (int i = 0; i < rhymeData.length(); i++) {
+        if (rhymeData != null) {
 
-            if (i < rhymeData.length() - 3) { //Avoiding going out of bounds with the next statement
-                String test = rhymeData.substring(i, i + 3);
+            ArrayList<String> list = new ArrayList<>(); //List that holds all the rhyme data objects individually as strings
+            int start = 1;
+            for (int i = 0; i < rhymeData.length(); i++) {
 
-                if (test.equals("},{")) { //Checks to see if the index is at the splitting mark of the objects
-                    String obj = rhymeData.substring(start, i + 1); //Grabs the individual object from the string
-                    list.add(obj); //Adds the object to the list
-                    start = i + 2; //Sets the starting point for the next object
-                }
+                if (i < rhymeData.length() - 3) { //Avoiding going out of bounds with the next statement
+                    String test = rhymeData.substring(i, i + 3);
+
+                    if (test.equals("},{")) { //Checks to see if the index is at the splitting mark of the objects
+                        String obj = rhymeData.substring(start, i + 1); //Grabs the individual object from the string
+                        list.add(obj); //Adds the object to the list
+                        start = i + 2; //Sets the starting point for the next object
+                    }
 
 
-            } else { //The case of the last object in the string
-                String test = rhymeData.substring(i, i + 1);
+                } else { //The case of the last object in the string
+                    String test = rhymeData.substring(i, i + 1);
 
-                if (test.equals("]")) { //Checks to see if its at the end of both the string and the object
-                    String obj = rhymeData.substring(start, i); //Grabs the last object in the string
-                    list.add(obj); //Adds the objects to the list
+                    if (test.equals("]")) { //Checks to see if its at the end of both the string and the object
+                        String obj = rhymeData.substring(start, i); //Grabs the last object in the string
+                        list.add(obj); //Adds the objects to the list
+                    }
                 }
             }
-        }
 
-        //Makes each String element a JSONObject and adds them to the objects list
-        if (list != null || list.size() == 0) {
-            try {
-                for (String element : list) {
-                    JSONObject obj = new JSONObject(element);
-                    objects.add(obj);
+            //Makes each String element a JSONObject and adds them to the objects list
+            if (list != null || list.size() == 0) {
+                try {
+                    for (String element : list) {
+                        JSONObject obj = new JSONObject(element);
+                        objects.add(obj);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("ERROR", "Something went wrong in making the string elements JSONObjects");
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.e("ERROR", "Something went wrong in making the string elements JSONObjects");
+                return objects;
             }
-            return objects;
-        }
 
+        }
         return null;
     }
 
@@ -217,7 +220,7 @@ public class Features {
         ArrayList<JSONObject> parsedData = parseData(data);
         ArrayList<String> rhymes = new ArrayList<>();
 
-        if (parsedData != null || parsedData.size() == 0) {
+        if (parsedData != null) {
 
             try {
 
