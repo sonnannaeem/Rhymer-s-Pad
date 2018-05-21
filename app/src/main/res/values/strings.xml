@@ -16,4 +16,8 @@
     <string name="hello_list_fragment">Hello list fragment</string>
     <string name="hello_word_fragment">Hello word fragment</string>
     <string name="test">test</string>
+    <string name="list_song_name">TITLE</string>
+    <string name="list_song_time">15/05/18</string>
+    <string name="list_song_lyrics">THESE ARE THE LYRICS</string>
+    <string name="list_rhyme_name">Rhyme</string>
 </resources>

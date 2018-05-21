@@ -9,21 +9,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="TITLE"/>
+        android:inputType="textNoSuggestions"
+        android:text="@string/list_song_name"/>
 
     <TextView
         android:id="@+id/list_song_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="15/05/18"/>
+        android:inputType="textNoSuggestions"
+        android:text="@string/list_song_time"/>
 
     <TextView
         android:id="@+id/list_song_lyrics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:inputType="textMultiLine"
-        android:text="THESE ARE THE LYRICS"/>
+        android:inputType="textNoSuggestions"
+        android:singleLine="true"
+        android:text="@string/list_song_lyrics"/>
 
 </LinearLayout>

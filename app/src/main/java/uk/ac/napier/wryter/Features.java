@@ -73,7 +73,6 @@ public class Features {
 
     /**
      * Retrieves any saved songs and de-serializes them into a list
-     *
      * @param c The application's current c
      * @return A list of all the saved songs that are de-serialized
      */
@@ -175,7 +174,7 @@ public class Features {
 
                 if (test.equals("]")){ //Checks to see if its at the end of both the string and the object
                     String obj = rhymeData.substring(start, i); //Grabs the last object in the string
-                    objects.add(obj); //Adds the objets to the list
+                    objects.add(obj); //Adds the objects to the list
                 }
             }
         }

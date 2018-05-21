@@ -8,11 +8,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -20,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 
 /**
@@ -27,6 +31,7 @@ import java.net.URL;
  */
 public class RhymeGenerator extends Fragment {
 
+    private ListView mListView;
     private TextView mTextView;
     private Button mButton;
 
@@ -46,17 +51,26 @@ public class RhymeGenerator extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mListView = (ListView) getView().findViewById(R.id.fragment_rhyme_list);
         mTextView = (TextView) getView().findViewById(R.id.rhyme_text);
         mButton = (Button) getView().findViewById(R.id.rhyme_button);
 
+        //Grab the info for the rhymes when the button is pressed
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v == mButton) {
-                    new APITask().execute("forgetful");
+                    new APITask().execute("crazy");
                 }
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mListView.setAdapter(null);
     }
 
     class APITask extends AsyncTask<String, Void, String> {
@@ -104,7 +118,24 @@ public class RhymeGenerator extends Fragment {
             }
 
             mButton.setVisibility(View.GONE);
-            mTextView.setText(s);
+            //mTextView.setText(s);
+
+            //Listing the rhymes if there are any
+            Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
+            //Making toasts display a little above the bottom navigation bar
+            toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
+
+            ArrayList<String> rhymes = Features.parseData(s);
+
+            if (rhymes == null || rhymes.size() == 0){
+                toast.setText("No rhymes found");
+                toast.show();
+                return;
+            }
+            else{
+                RhymeAdapter ra = new RhymeAdapter(getContext(), R.layout.item_rhyme, rhymes);
+                mListView.setAdapter(ra);
+            }
         }
     }
 }
