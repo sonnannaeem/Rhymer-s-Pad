@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,7 +43,6 @@ public class RhymeGenerator extends Fragment {
 
     private ListView mListView;
     private EditText mEditText;
-    private Button mButton;
 
     public RhymeGenerator() {
         // Required empty public constructor
@@ -67,16 +67,34 @@ public class RhymeGenerator extends Fragment {
 
         mListView = (ListView) getView().findViewById(R.id.fragment_rhyme_list);
         mEditText = (EditText) getView().findViewById(R.id.fragment_rhyme_editText);
-        mButton = (Button) getView().findViewById(R.id.fragment_rhyme_button);
 
-        //Grab the rhymes of the text when the button is pressed
-        mButton.setOnClickListener(new View.OnClickListener() {
+        //Grabs words that rhymes with the text and lists them if there are any
+        mEditText.setOnKeyListener(new View.OnKeyListener() {
             @Override
-            public void onClick(View v) {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
                 String rhyme = mEditText.getText().toString();
-                if (v == mButton) {
-                    new APITask().execute(rhyme);
+
+                if (event.getAction() == KeyEvent.ACTION_DOWN) {
+                    switch (keyCode) {
+                        case KeyEvent.KEYCODE_DPAD_CENTER:
+                        case KeyEvent.KEYCODE_ENTER:
+
+                            if (mEditText.getText().toString().contains(" ")){ //Check to see the user only inputted one word before searching rhymes
+                                toast.setText("Please make sure it's only one word");
+                                toast.show();
+                                return false;
+                            }
+
+                            new APITask().execute(rhyme);
+                            return true;
+
+                        default:
+
+                            break;
+                    }
                 }
+
+                return false;
             }
         });
     }
@@ -104,8 +122,10 @@ public class RhymeGenerator extends Fragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
+
+        mEditText.setText(null); //Clearing the textif the user navigates somewhere else
     }
 
     /**
@@ -149,6 +169,7 @@ public class RhymeGenerator extends Fragment {
                 //Letting user know it could be an internet connection issue
                 toast.setText("Please make sure you have a working internet connection");
                 toast.show();
+                getFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RhymeGenerator()).commit(); //Restarts the fragment in order to let the user input again
                 return null;
             }
         }
@@ -161,29 +182,21 @@ public class RhymeGenerator extends Fragment {
             }
 
             //Getting rid of the components when the list of rhymes appears
-            mEditText.setText("");
             mEditText.setVisibility(View.GONE);
-            mButton.setVisibility(View.GONE);
-
-            //Hide the keyboard after searched
-            View view = getActivity().getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
 
             //Listing the rhymes if there are any
-            if (s != null) { //Checking if
-                    ArrayList<String> rhymes = Features.getRhymes(s);
+            if (s != null) { //Checking to make sure if data was grabbed
+                ArrayList<String> rhymes = Features.getRhymes(s);
 
-                    if (rhymes == null || rhymes.size() == 0) { //Check to see if there were any rhymes at all
-                        toast.setText("No rhymes found");
-                        toast.show();
-                        return;
-                    } else {
-                        RhymeAdapter ra = new RhymeAdapter(getContext(), R.layout.item_rhyme, rhymes);
-                        mListView.setAdapter(ra);
-                    }
+                if (rhymes == null || rhymes.size() == 0) { //Check to see if there were any rhymes at all
+                    toast.setText("No rhymes found");
+                    toast.show();
+                    getFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RhymeGenerator()).commit(); //Restarts the fragment in order to let the user input again
+                    return;
+                } else {
+                    RhymeAdapter ra = new RhymeAdapter(getContext(), R.layout.item_rhyme, rhymes);
+                    mListView.setAdapter(ra);
+                }
             }
         }
     }

@@ -50,6 +50,7 @@ public class RhymeAdapter extends ArrayAdapter<String> {
                 Toast toast = Toast.makeText(getContext(), null, Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
 
+                //Copying the rhyme to the user's clipboard if they click on it
                 ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("simple text", rhyme);
                 clipboard.setPrimaryClip(clip);

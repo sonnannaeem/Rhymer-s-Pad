@@ -9,7 +9,6 @@
     <string name="song_note">New Song</string>
     <string name="song_save">Save</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hello_dank_fragment">Hello dank fragment</string>
     <string name="hello_rhyme_fragment">Hello rhyme fragment</string>
@@ -21,4 +20,5 @@
     <string name="list_song_lyrics">THESE ARE THE LYRICS</string>
     <string name="list_rhyme_name">Rhyme</string>
     <string name="RHYME">Rhyme</string>
+    <string name="rhyme_hint_fragment">Search rhymes</string>
 </resources>

@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * A fragment dedicated to displaying random words at a set interval
  */
 public class WordGenerator extends Fragment {
 

@@ -12,16 +12,10 @@
 
         <EditText
             android:id="@+id/fragment_rhyme_editText"
-            android:layout_width="103dp"
-            android:layout_height="wrap_content"
-            android:singleLine="true" />
-
-        <Button
-            android:id="@+id/fragment_rhyme_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/RHYME"
-            android:textAlignment="center" />
+            android:singleLine="true"
+            android:hint="@string/rhyme_hint_fragment"/>
 
     </LinearLayout>
 
