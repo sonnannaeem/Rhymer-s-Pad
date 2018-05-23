@@ -73,8 +73,11 @@ public class RhymeGenerator extends Fragment {
                 String rhyme = mSearchView.getQuery().toString();
 
                 if (rhyme.contains(" ")){
+                    getFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RhymeGenerator()).commit(); //Restarts the fragment in order to let the user input again
+
                     toast.setText("Please make sure it's only one word");
                     toast.show();
+                    
                     return false;
                 }
 

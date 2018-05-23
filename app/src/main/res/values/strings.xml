@@ -21,4 +21,5 @@
     <string name="list_rhyme_name">Rhyme</string>
     <string name="RHYME">Rhyme</string>
     <string name="rhyme_hint_fragment">Search rhymes here…</string>
+    <string name="fragment_word">Coming Soon</string>
 </resources>
