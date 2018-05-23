@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
@@ -42,17 +43,14 @@ public class RhymeGenerator extends Fragment {
     private Toast toast;
 
     private ListView mListView;
-    private EditText mEditText;
+    private SearchView mSearchView;
 
     public RhymeGenerator() {
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_rhyme_generator, container, false);
     }
@@ -66,66 +64,36 @@ public class RhymeGenerator extends Fragment {
         toast.setGravity(Gravity.CENTER_HORIZONTAL, 0, 800);
 
         mListView = (ListView) getView().findViewById(R.id.fragment_rhyme_list);
-        mEditText = (EditText) getView().findViewById(R.id.fragment_rhyme_editText);
+        mSearchView = (SearchView) getView().findViewById(R.id.fragment_rhyme_search);
 
-        //Grabs words that rhymes with the text and lists them if there are any
-        mEditText.setOnKeyListener(new View.OnKeyListener() {
+        //Grabs rhymes of the searched word from the API task after the user submits their search
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                String rhyme = mEditText.getText().toString();
+            public boolean onQueryTextSubmit(String query) {
+                String rhyme = mSearchView.getQuery().toString();
 
-                if (event.getAction() == KeyEvent.ACTION_DOWN) {
-                    switch (keyCode) {
-                        case KeyEvent.KEYCODE_DPAD_CENTER:
-                        case KeyEvent.KEYCODE_ENTER:
-
-                            if (mEditText.getText().toString().contains(" ")){ //Check to see the user only inputted one word before searching rhymes
-                                toast.setText("Please make sure it's only one word");
-                                toast.show();
-                                return false;
-                            }
-
-                            new APITask().execute(rhyme);
-                            return true;
-
-                        default:
-
-                            break;
-                    }
+                if (rhyme.contains(" ")){
+                    toast.setText("Please make sure it's only one word");
+                    toast.show();
+                    return false;
                 }
 
+                new APITask().execute(rhyme);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_rhyme_options, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        int targetId = R.id.menu_rhyme_new;
-
-        Intent intent = new Intent(getContext(), MainActivity.class);
-        RhymeGenerator fragment = new RhymeGenerator();
-
-        //If the menu button that's pressed is the new button, start the writing activity
-        if (itemId == targetId) {
-            getFragmentManager().beginTransaction().replace(R.id.main_frameLayout, fragment).commit();
-        }
-
-        return true;
-    }
-
-    @Override
     public void onPause() {
         super.onPause();
 
-        mEditText.setText(null); //Clearing the textif the user navigates somewhere else
+        mSearchView.setQuery(null, false); //Clear the query if the user navigates soemwhere else
     }
 
     /**
@@ -182,7 +150,6 @@ public class RhymeGenerator extends Fragment {
             }
 
             //Getting rid of the components when the list of rhymes appears
-            mEditText.setVisibility(View.GONE);
 
             //Listing the rhymes if there are any
             if (s != null) { //Checking to make sure if data was grabbed
