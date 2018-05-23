@@ -115,7 +115,11 @@ public class Features {
         Collections.sort(songs, new Comparator<Song>() {
             @Override
             public int compare(Song o1, Song o2) {
-                return o1.getName().compareTo(o2.getName());
+                //Makes sure that no matter if it is upper or lower case, they get sorted alphabetically
+                String name1 = o1.getName().toLowerCase();
+                String name2 = o2.getName().toLowerCase();
+
+                return name1.compareTo(name2);
             }
         });
 

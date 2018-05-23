@@ -77,7 +77,7 @@ public class RhymeGenerator extends Fragment {
 
                     toast.setText("Please make sure it's only one word");
                     toast.show();
-                    
+
                     return false;
                 }
 
@@ -138,7 +138,7 @@ public class RhymeGenerator extends Fragment {
                 Log.e("ERROR", e.getMessage(), e);
 
                 //Letting user know it could be an internet connection issue
-                toast.setText("Please make sure you have a working internet connection");
+                toast.setText("ERROR: Please check to see if it's your internet connection");
                 toast.show();
                 getFragmentManager().beginTransaction().replace(R.id.main_frameLayout, new RhymeGenerator()).commit(); //Restarts the fragment in order to let the user input again
                 return null;
